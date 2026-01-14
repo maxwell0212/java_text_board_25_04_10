@@ -21,12 +21,20 @@ public class Main {
             else if( cmd.equals("/usr/article/write")){
                 System.out.println("== 게시물 작성 ==");
                 System.out.print("제목 : ");
-                String article = sc.nextLine();
+                String subject = sc.nextLine();
+                if( subject.trim().isEmpty() ){
+                    System.out.println("제목을 입력해주세요.");
+                    continue;
+                }
+
                 System.out.print("내용 : ");
                 String user = sc.nextLine();
-
+                if( user.trim().isEmpty() ){
+                    System.out.println("내용을 입력해주세요.");
+                    continue;
+                }
                 int id= 1;
-                System.out.printf("제목: %s \n", article);
+                System.out.printf("제목: %s \n", subject);
                 System.out.printf("내용: %s \n", user );
                 System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
             }
