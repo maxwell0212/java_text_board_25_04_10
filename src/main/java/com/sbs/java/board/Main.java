@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        int lastArticleId = 0;
 
         System.out.println("== 자바 게시판 ==");
         System.out.println("게시판을 시작합니다.");
@@ -33,7 +34,7 @@ public class Main {
                     System.out.println("내용을 입력해주세요.");
                     continue;
                 }
-                int id= 1;
+                int id= ++lastArticleId;
                 System.out.printf("제목: %s \n", subject);
                 System.out.printf("내용: %s \n", user );
                 System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
