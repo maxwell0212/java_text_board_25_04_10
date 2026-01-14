@@ -35,6 +35,13 @@ public class Main {
                     continue;
                 }
                 int id= ++lastArticleId;
+
+                Article article = new Article();
+                article.id = id;
+                article.subject = subject;
+                article.content = user;
+
+                System.out.println("생성 된 게시물 객체 : " + article);
                 System.out.printf("제목: %s \n", subject);
                 System.out.printf("내용: %s \n", user );
                 System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
@@ -49,4 +56,10 @@ public class Main {
 
         sc.close();
     }
+}
+
+class Article {
+    int id;
+    String subject;
+    String content;
 }
