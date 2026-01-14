@@ -8,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int lastArticleId = 0;
+        Article lastArticle = null;
 
         System.out.println("== 자바 게시판 ==");
         System.out.println("게시판을 시작합니다.");
@@ -37,11 +38,24 @@ public class Main {
                 int id= ++lastArticleId;
 
                 Article article = new Article(id, subject, user);
+                lastArticle = article;
 
                 System.out.println("생성 된 게시물 객체 : " + article);
                 System.out.printf("제목: %s \n", subject);
                 System.out.printf("내용: %s \n", user );
                 System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
+            }
+            else if( cmd.equals("/usr/article/detail")){
+                Article article = lastArticle;
+                if( article == null ){
+                    System.out.println("게시물이 존재하지 않습니다.");
+                    continue;
+                }
+                System.out.println("== 게시물 상세보기 ==");
+                System.out.printf("번호 : %d\n", article.id);
+                System.out.printf("제목 : %s\n", article.subject);
+                System.out.printf("내용 : %s\n", article.content);
+
             }
             else {
                 System.out.println("잘못된 명령어 입니다.");
