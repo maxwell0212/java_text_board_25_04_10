@@ -1,5 +1,7 @@
 package com.sbs.java.board;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 //TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
@@ -9,6 +11,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int lastArticleId = 0;
         Article lastArticle = null;
+        List<Article> articles = new ArrayList<>();
 
         System.out.println("== 자바 게시판 ==");
         System.out.println("게시판을 시작합니다.");
@@ -38,6 +41,7 @@ public class Main {
                 int id= ++lastArticleId;
 
                 Article article = new Article(id, subject, user);
+                articles.add(article);
                 lastArticle = article;
 
                 System.out.println("생성 된 게시물 객체 : " + article);
@@ -56,6 +60,27 @@ public class Main {
                 System.out.printf("제목 : %s\n", article.subject);
                 System.out.printf("내용 : %s\n", article.content);
 
+            }
+            else if( cmd.equals("/usr/article/list")){
+                if( articles.isEmpty() ){
+                    System.out.println("게시물이 존재하지 않습니다.");
+                    continue;
+                }
+                System.out.println("== 게시물 리스트 ==");
+                System.out.println("번호 | 제목");
+                /*
+                for(int i=0; i<articles.size(); i++){
+                    Article article = articles.get(i);
+                    System.out.printf("%d | %s\n", article.id, article.subject);
+                }
+                */
+                /*
+                for( Article article : articles){
+                    System.out.printf("%d | %s\n", article.id, article.subject);
+                }
+                */
+                articles.forEach( article ->
+                        System.out.printf("%d | %s\n", article.id, article.subject));
             }
             else {
                 System.out.println("잘못된 명령어 입니다.");
