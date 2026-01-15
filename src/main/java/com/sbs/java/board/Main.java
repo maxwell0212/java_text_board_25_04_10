@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 //TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
 // 에디터 여백에 있는 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
 public class Main {
-    static void article_test_data(List<Article> articles) {
+    static void makeArticleTestData(List<Article> articles) {
         /*
         articles.add(new Article(1, "제목1", "내용1"));
         articles.add(new Article(2, "제목2", "내용2"));
@@ -21,9 +21,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int lastArticleId = 0;
-        Article lastArticle = null;
+
         List<Article> articles = new ArrayList<>();
-        article_test_data(articles);
+        makeArticleTestData(articles);
+        lastArticleId = articles.get(articles.size()-1).id;
+        Article lastArticle = articles.get(articles.size()-1);
 
         System.out.println("== 자바 게시판 ==");
         System.out.println("게시판을 시작합니다.");
