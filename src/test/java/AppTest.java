@@ -6,14 +6,17 @@ public class AppTest {
         String[] queryStringBits = queryString.split("&");
         System.out.println(Arrays.toString(queryStringBits) );
 
-        /*
         for(String bit : queryStringBits) {
-            System.out.println(bit);
-        }
-        */
+            String[] bitBits = bit.split("=");
 
+            String paramName = bitBits[0];
+            String paramValue = bitBits[1];
+            System.out.printf("%s : %s\n", paramName, paramValue );
+        }
+        /*
         Arrays.stream(queryStringBits)
                 .forEach(System.out::println);
+         */
     }
 
 }
