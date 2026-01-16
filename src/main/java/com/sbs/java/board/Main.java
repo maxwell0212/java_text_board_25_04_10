@@ -25,7 +25,6 @@ public class Main {
         List<Article> articles = new ArrayList<>();
         makeArticleTestData(articles);
         lastArticleId = articles.get(articles.size()-1).id;
-        Article lastArticle = articles.get(articles.size()-1);
 
         System.out.println("== 자바 게시판 ==");
         System.out.println("게시판을 시작합니다.");
@@ -56,7 +55,6 @@ public class Main {
 
                 Article article = new Article(id, subject, user);
                 articles.add(article);
-                lastArticle = article;
 
                 System.out.println("생성 된 게시물 객체 : " + article);
                 System.out.printf("제목: %s \n", subject);
@@ -64,9 +62,14 @@ public class Main {
                 System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
             }
             else if( cmd.equals("/usr/article/detail")){
-                Article article = lastArticle;
-                if( article == null ){
+                if( articles.isEmpty()){
                     System.out.println("게시물이 존재하지 않습니다.");
+                    continue;
+                }
+                Article article = articles.get(articles.size()-1);
+
+                if( article == null ){
+                    System.out.println("원하는 게시물이 존재하지 않습니다.");
                     continue;
                 }
                 System.out.println("== 게시물 상세보기 ==");
