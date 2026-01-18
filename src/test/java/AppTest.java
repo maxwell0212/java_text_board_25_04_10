@@ -3,20 +3,11 @@ import java.util.*;
 public class AppTest {
     public static void main(String[] args) {
         String queryString = "subject=제목1&content=내용1&writerName=양관식&boardId=5";
-        String[] queryStringBits = queryString.split("&");
-        System.out.println(Arrays.toString(queryStringBits) );
+        Map<String, String> params = Util.getParams(queryString);
+        System.out.println(params);
 
-        Map<String, String> params = new HashMap<>();
-
-        for(String bit : queryStringBits) {
-            String[] bitBits = bit.split("=");
-
-            String paramName = bitBits[0];
-            String paramValue = bitBits[1];
-
-            params.put(paramName, paramValue);
-            //System.out.printf("%s : %s\n", paramName, paramValue );
-        }
+        queryString = "subject=제목20&content=내용20&writerName=오애순&boardId=6";
+        params = Util.getParams(queryString);
         System.out.println(params);
 
         System.out.println("== 원하는 것만 하나씩 뽑아오기 ==");
@@ -29,4 +20,19 @@ public class AppTest {
         params.forEach((key, value)-> System.out.printf("%s : %s\n", key, value));
     }
 
+}
+
+class Util {
+    static Map<String, String> getParams(String queryStr){
+        Map<String, String> params = new LinkedHashMap<>();
+
+        String[] queryString = queryStr.split("&");
+
+        for(String bit : queryString ) {
+            String[] bitBits = bit.split("=");
+            params.put(bitBits[0], bitBits[1]);
+        }
+
+        return params;
+    }
 }
