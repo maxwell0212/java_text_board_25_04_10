@@ -17,17 +17,25 @@ public class AppTest {
 
 class Rq {
     String url;
+    Map<String, String> params;
+    String urlPath;
 
     Rq(String url){
         this.url = url;
     }
 
     public Map<String, String> getParams() {
-        return Util.getParamsFromUrl(url);
+        if(this.params == null) {
+            this.params = Util.getParamsFromUrl(this.url);
+        }
+        return this.params;
     }
 
     public String getUrlPath() {
-        return Util.getPathFromUrl(url);
+        if( this.urlPath == null) {
+            this.urlPath = Util.getPathFromUrl(this.url);
+        }
+        return this.urlPath;
     }
 }
 class Util {
