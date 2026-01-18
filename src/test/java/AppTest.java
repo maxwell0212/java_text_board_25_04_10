@@ -2,12 +2,8 @@ import java.util.*;
 
 public class AppTest {
     public static void main(String[] args) {
-        String queryString = "subject=제목1&content=내용1&writerName=양관식&boardId=5";
-        Map<String, String> params = Util.getParams(queryString);
-        System.out.println(params);
-
-        queryString = "subject=제목20&content=내용20&writerName=오애순&boardId=6";
-        params = Util.getParams(queryString);
+        String url = "/usr/article/write?subject=자바는 무엇인가요?&content=자바는 객체지향 프로그래밍 언어입니다.1+2=3&writerName=오애순&boardId=1&id=";
+        Map<String, String> params = Util.getParamsFromUrl(url);
         System.out.println(params);
 
         System.out.println("== 원하는 것만 하나씩 뽑아오기 ==");
@@ -18,19 +14,25 @@ public class AppTest {
 
         System.out.println("== 반복문을 이용한 데이터 순회 ==");
         params.forEach((key, value)-> System.out.printf("%s : %s\n", key, value));
+
     }
 
 }
 
 class Util {
-    static Map<String, String> getParams(String queryStr){
+    static Map<String, String> getParamsFromUrl(String url){
         Map<String, String> params = new LinkedHashMap<>();
 
-        String[] queryString = queryStr.split("&");
-
-        for(String bit : queryString ) {
-            String[] bitBits = bit.split("=");
-            params.put(bitBits[0], bitBits[1]);
+        String[] urlBits = url.split("\\?", 2);
+        if( urlBits.length == 1)
+            return params;
+        String queryStr = urlBits[1];
+        for(String bit : queryStr.split("&") ) {
+            String[] bits = bit.split("=", 2);
+            System.out.println(Arrays.toString(bits));
+            System.out.printf("length: %d \n", bits.length);
+            if(bits[1].isEmpty()) continue;
+            params.put(bits[0], bits[1]);
         }
 
         return params;
