@@ -1,8 +1,6 @@
 package com.sbs.java.board;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.IntStream;
 
 //TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
@@ -32,11 +30,12 @@ public class Main {
         while(true){
             System.out.print("명령) ");
             String cmd = sc.nextLine();
-            if( cmd.equals("exit")){
+            Rq rq = new Rq(cmd);
+            if( rq.getUrlPath().equals("exit")){
                 System.out.println("게시판을 종료합니다.");
                 break;
             }
-            else if( cmd.equals("/usr/article/write")){
+            else if( rq.getUrlPath().equals("/usr/article/write")){
                 System.out.println("== 게시물 작성 ==");
                 System.out.print("제목 : ");
                 String subject = sc.nextLine();
@@ -61,7 +60,7 @@ public class Main {
                 System.out.printf("내용: %s \n", user );
                 System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
             }
-            else if( cmd.equals("/usr/article/detail")){
+            else if( rq.getUrlPath().equals("/usr/article/detail")){
                 if( articles.isEmpty()){
                     System.out.println("게시물이 존재하지 않습니다.");
                     continue;
@@ -78,7 +77,7 @@ public class Main {
                 System.out.printf("내용 : %s\n", article.content);
 
             }
-            else if( cmd.equals("/usr/article/list")){
+            else if( rq.getUrlPath().equals("/usr/article/list")){
                 if( articles.isEmpty() ){
                     System.out.println("게시물이 존재하지 않습니다.");
                     continue;
@@ -95,7 +94,6 @@ public class Main {
             else {
                 System.out.println("잘못된 명령어 입니다.");
             }
-
         }
 
         System.out.println("== 자바 게시판 종료 ==");
@@ -118,5 +116,48 @@ class Article {
     @Override
     public String toString() {
         return "{id: %d, subject: '%s', content: '%s'}".formatted(id, subject, content);
+    }
+}
+
+class Rq {
+    String url;
+    Map<String, String> params;
+    String urlPath;
+
+    Rq(String url){
+        this.url = url;
+        this.params = Util.getParamsFromUrl(url);
+        this.urlPath = Util.getPathFromUrl(url);
+    }
+
+    public Map<String, String> getParams() {
+        return this.params;
+    }
+
+    public String getUrlPath() {
+        return this.urlPath;
+    }
+}
+class Util {
+    static Map<String, String> getParamsFromUrl(String url){
+        Map<String, String> params = new LinkedHashMap<>();
+
+        String[] urlBits = url.split("\\?", 2);
+        if( urlBits.length == 1)
+            return params;
+        String queryStr = urlBits[1];
+        for(String bit : queryStr.split("&") ) {
+            String[] bits = bit.split("=", 2);
+            //System.out.println(Arrays.toString(bits));
+            //System.out.printf("length: %d \n", bits.length);
+            if(bits[1].isEmpty()) continue;
+            params.put(bits[0], bits[1]);
+        }
+
+        return params;
+    }
+
+    static String getPathFromUrl(String url){
+        return url.split("\\?", 2)[0];
     }
 }
