@@ -15,6 +15,8 @@ public class AppTest {
         System.out.println("== 반복문을 이용한 데이터 순회 ==");
         params.forEach((key, value)-> System.out.printf("%s : %s\n", key, value));
 
+        String urlPath = Util.getPathFromUrl(url);
+        System.out.println(urlPath);
     }
 
 }
@@ -36,5 +38,9 @@ class Util {
         }
 
         return params;
+    }
+
+    static String getPathFromUrl(String url){
+        return url.split("\\?", 2)[0];
     }
 }
