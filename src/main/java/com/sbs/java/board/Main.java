@@ -61,16 +61,19 @@ public class Main {
                 System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
             }
             else if( rq.getUrlPath().equals("/usr/article/detail")){
+                Map<String, String> params = rq.getParams();
+                int id = Integer.parseInt(params.get("id"));
+
                 if( articles.isEmpty()){
                     System.out.println("게시물이 존재하지 않습니다.");
                     continue;
                 }
-                Article article = articles.get(articles.size()-1);
-
-                if( article == null ){
-                    System.out.println("원하는 게시물이 존재하지 않습니다.");
+                if( id > articles.size() ){
+                    System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
                     continue;
                 }
+                Article article = articles.get(id-1);
+
                 System.out.println("== 게시물 상세보기 ==");
                 System.out.printf("번호 : %d\n", article.id);
                 System.out.printf("제목 : %s\n", article.subject);
