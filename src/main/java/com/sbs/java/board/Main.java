@@ -1,6 +1,7 @@
 package com.sbs.java.board;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 //TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
@@ -92,7 +93,18 @@ public class Main {
             }
             else if( rq.getUrlPath().equals("/usr/article/list")){
                 Map<String, String>  params = rq.getParams();
-                List<Article> sortedArticles = new ArrayList<>(articles);
+
+                // 검색 시작
+                List<Article> filteredArticles = new ArrayList<>(articles);
+                if( params.containsKey("searchKeyword") ){
+                    String searchKeyword = params.get("searchKeyword");
+                    // filteredArticles = new ArrayList<>(); // 새 리스트 객체 생성
+                    filteredArticles = articles.stream()
+                            .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
+                            .collect(Collectors.toList());
+                }
+                // 정렬 로직
+                List<Article> sortedArticles = filteredArticles;
                 boolean orderByIdDesc = true;
 
                 if( params.containsKey("orderBy") ){
@@ -115,7 +127,7 @@ public class Main {
                     System.out.println("게시물이 존재하지 않습니다.");
                     continue;
                 }
-                System.out.println("== 게시물 리스트 ==");
+                System.out.printf("== 게시물 리스트 (총 %d개)==\n", sortedArticles.size());
                 System.out.println("번호 | 제목");
 
                 sortedArticles.forEach(
