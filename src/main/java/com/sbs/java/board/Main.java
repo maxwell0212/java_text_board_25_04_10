@@ -37,29 +37,8 @@ public class Main {
                 break;
             }
             else if( rq.getUrlPath().equals("/usr/article/write")){
-                System.out.println("== 게시물 작성 ==");
-                System.out.print("제목 : ");
-                String subject = sc.nextLine();
-                if( subject.trim().isEmpty() ){
-                    System.out.println("제목을 입력해주세요.");
-                    continue;
-                }
-
-                System.out.print("내용 : ");
-                String user = sc.nextLine();
-                if( user.trim().isEmpty() ){
-                    System.out.println("내용을 입력해주세요.");
-                    continue;
-                }
-                int id= ++lastArticleId;
-
-                Article article = new Article(id, subject, user);
-                articles.add(article);
-
-                System.out.println("생성 된 게시물 객체 : " + article);
-                System.out.printf("제목: %s \n", subject);
-                System.out.printf("내용: %s \n", user );
-                System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
+                actionUsrArticleWrite(sc, articles, lastArticleId);
+                lastArticleId++;
             }
             else if( rq.getUrlPath().equals("/usr/article/detail")){
                 actionUsrArticleDetail(rq, articles);
@@ -76,6 +55,32 @@ public class Main {
 
         sc.close();
     }
+
+    private static void actionUsrArticleWrite(Scanner sc, List<Article> articles, int lastArticleId) {
+        System.out.println("== 게시물 작성 ==");
+        System.out.print("제목 : ");
+        String subject = sc.nextLine();
+        if( subject.trim().isEmpty() ){
+            System.out.println("제목을 입력해주세요.");
+            return;
+        }
+
+        System.out.print("내용 : ");
+        String user = sc.nextLine();
+        if( user.trim().isEmpty() ){
+            System.out.println("내용을 입력해주세요.");
+            return;
+        }
+        int id= ++lastArticleId;
+
+        Article article = new Article(id, subject, user);
+        articles.add(article);
+
+        System.out.println("생성 된 게시물 객체 : " + article);
+        System.out.printf("제목: %s \n", subject);
+        System.out.printf("내용: %s \n", user );
+        System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
+     }
 
     private static void actionUsrArticleDetail(Rq rq, List<Article> articles) {
         Map<String, String> params = rq.getParams();
