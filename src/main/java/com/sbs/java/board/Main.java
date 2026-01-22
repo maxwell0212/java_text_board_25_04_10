@@ -92,46 +92,7 @@ public class Main {
 
             }
             else if( rq.getUrlPath().equals("/usr/article/list")){
-                Map<String, String>  params = rq.getParams();
-
-                // 검색 시작
-                List<Article> filteredArticles = new ArrayList<>(articles);
-                if( params.containsKey("searchKeyword") ){
-                    String searchKeyword = params.get("searchKeyword");
-                    // filteredArticles = new ArrayList<>(); // 새 리스트 객체 생성
-                    filteredArticles = articles.stream()
-                            .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
-                            .collect(Collectors.toList());
-                }
-                // 정렬 로직
-                List<Article> sortedArticles = filteredArticles;
-                boolean orderByIdDesc = true;
-
-                if( params.containsKey("orderBy") ){
-                    String orderBy = params.get("orderBy");
-                    switch (orderBy){
-                        case "idAsc":
-                            sortedArticles.sort((a1, a2) -> a1.id - a2.id);
-                            break;
-                        case "idDesc":
-                        default:
-                            sortedArticles.sort((a1, a2) -> a2.id - a1.id);
-                            break;
-                    }
-                }
-                else {
-                    sortedArticles.sort( (a1, a2) -> a2.id - a1.id );
-                }
-
-                if( articles.isEmpty() ){
-                    System.out.println("게시물이 존재하지 않습니다.");
-                    continue;
-                }
-                System.out.printf("== 게시물 리스트 (총 %d개)==\n", sortedArticles.size());
-                System.out.println("번호 | 제목");
-
-                sortedArticles.forEach(
-                            article -> System.out.printf("%d | %s\n", article.id, article.subject));
+               actionUsrArticleList(rq, articles);
             }
             else {
                 System.out.println("잘못된 명령어 입니다.");
@@ -141,6 +102,49 @@ public class Main {
         System.out.println("== 자바 게시판 종료 ==");
 
         sc.close();
+    }
+
+    private static void actionUsrArticleList(Rq rq, List<Article> articles) {
+        Map<String, String>  params = rq.getParams();
+
+        // 검색 시작
+        List<Article> filteredArticles = new ArrayList<>(articles);
+        if( params.containsKey("searchKeyword") ){
+            String searchKeyword = params.get("searchKeyword");
+            // filteredArticles = new ArrayList<>(); // 새 리스트 객체 생성
+            filteredArticles = articles.stream()
+                    .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
+                    .collect(Collectors.toList());
+        }
+        // 정렬 로직
+        List<Article> sortedArticles = filteredArticles;
+        boolean orderByIdDesc = true;
+
+        if( params.containsKey("orderBy") ){
+            String orderBy = params.get("orderBy");
+            switch (orderBy){
+                case "idAsc":
+                    sortedArticles.sort((a1, a2) -> a1.id - a2.id);
+                    break;
+                case "idDesc":
+                default:
+                    sortedArticles.sort((a1, a2) -> a2.id - a1.id);
+                    break;
+            }
+        }
+        else {
+            sortedArticles.sort( (a1, a2) -> a2.id - a1.id );
+        }
+
+        if( articles.isEmpty() ){
+            System.out.println("게시물이 존재하지 않습니다.");
+            return;
+        }
+        System.out.printf("== 게시물 리스트 (총 %d개)==\n", sortedArticles.size());
+        System.out.println("번호 | 제목");
+
+        sortedArticles.forEach(
+                article -> System.out.printf("%d | %s\n", article.id, article.subject));
     }
 }
 
