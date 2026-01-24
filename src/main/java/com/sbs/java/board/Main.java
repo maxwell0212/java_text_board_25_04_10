@@ -49,6 +49,9 @@ public class Main {
             else if( rq.getUrlPath().equals("/usr/article/modify")){
                 actionUsrArticleModify(sc, rq, articles);
             }
+            else if( rq.getUrlPath().equals("/usr/article/delete")){
+                actionUsrArticleDelete(rq, articles);
+            }
             else {
                 System.out.println("잘못된 명령어 입니다.");
             }
@@ -57,6 +60,52 @@ public class Main {
         System.out.println("== 자바 게시판 종료 ==");
 
         sc.close();
+    }
+
+    private static void actionUsrArticleDelete(Rq rq, List<Article> articles) {
+        Map<String, String> params = rq.getParams();
+        if( !params.containsKey("id") ) {
+            System.out.println("id값을 입력해주세요.");
+            return;
+        }
+        int id = 0;
+        try{
+            id = Integer.parseInt(params.get("id"));
+        } catch( NumberFormatException e ){
+            System.out.println("id를 정수형태롤 입력해주세요.");
+            return;
+        }
+
+        if( articles.isEmpty()){
+            System.out.println("게시물이 존재하지 않습니다.");
+            return;
+        }
+        if( id > articles.size() ){
+            System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+            return;
+        }
+        System.out.printf("== %d번 게시물 삭제 ==\n", id);
+        /*
+        Article findArticle = null;
+        for(Article article : articles){
+            if(article.id == id ){
+                findArticle = article;
+                break;
+            }
+        }
+        */
+        int finalId = id;
+        Article findArticle = articles.stream()
+                .filter(article-> atricle.id == finalId )
+                .findFirst()
+                .orElse(null);
+
+        if( findArticle == null ){
+            System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
+            return;
+        }
+        articles.remove(findArticle);
+        System.out.printf("%d번 게시물이 삭제 되었습니다.", id );
     }
 
     private static void actionUsrArticleModify(Scanner sc, Rq rq, List<Article> articles) {
