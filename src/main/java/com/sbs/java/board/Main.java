@@ -7,7 +7,10 @@ import java.util.stream.IntStream;
 //TIP 코드를 <b>실행</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나
 // 에디터 여백에 있는 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
 public class Main {
-    static void makeArticleTestData(List<Article> articles) {
+    static List<Article> articles = new ArrayList<>();
+    static int lastArticleId = 0;
+
+    static void makeArticleTestData( ) {
         /*
         articles.add(new Article(1, "제목1", "내용1"));
         articles.add(new Article(2, "제목2", "내용2"));
@@ -19,11 +22,8 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int lastArticleId = 0;
 
-        List<Article> articles = new ArrayList<>();
-        makeArticleTestData(articles);
-        lastArticleId = articles.get(articles.size()-1).id;
+        makeArticleTestData();
 
         System.out.println("== 자바 게시판 ==");
         System.out.println("게시판을 시작합니다.");
@@ -37,20 +37,20 @@ public class Main {
                 break;
             }
             else if( rq.getUrlPath().equals("/usr/article/write")){
-                actionUsrArticleWrite(sc, articles, lastArticleId);
+                actionUsrArticleWrite(sc);
                 lastArticleId++;
             }
             else if( rq.getUrlPath().equals("/usr/article/detail")){
-                actionUsrArticleDetail(rq, articles);
+                actionUsrArticleDetail(rq);
             }
             else if( rq.getUrlPath().equals("/usr/article/list")){
-               actionUsrArticleList(rq, articles);
+               actionUsrArticleList(rq);
             }
             else if( rq.getUrlPath().equals("/usr/article/modify")){
-                actionUsrArticleModify(sc, rq, articles);
+                actionUsrArticleModify(sc, rq);
             }
             else if( rq.getUrlPath().equals("/usr/article/delete")){
-                actionUsrArticleDelete(rq, articles);
+                actionUsrArticleDelete(rq);
             }
             else {
                 System.out.println("잘못된 명령어 입니다.");
@@ -62,7 +62,7 @@ public class Main {
         sc.close();
     }
 
-    private static void actionUsrArticleDelete(Rq rq, List<Article> articles) {
+    private static void actionUsrArticleDelete(Rq rq) {
         Map<String, String> params = rq.getParams();
         if( !params.containsKey("id") ) {
             System.out.println("id값을 입력해주세요.");
@@ -95,7 +95,7 @@ public class Main {
         System.out.printf("%d번 게시물이 삭제 되었습니다.\n", id );
     }
 
-    private static void actionUsrArticleModify(Scanner sc, Rq rq, List<Article> articles) {
+    private static void actionUsrArticleModify(Scanner sc, Rq rq) {
         Map<String, String> params = rq.getParams();
         if( !params.containsKey("id") ) {
             System.out.println("id값을 입력해주세요.");
@@ -134,7 +134,9 @@ public class Main {
         System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
     }
 
-    private static void actionUsrArticleWrite(Scanner sc, List<Article> articles, int lastArticleId) {
+    private static void actionUsrArticleWrite(Scanner sc) {
+        lastArticleId = articles.get(articles.size()-1).id;
+
         System.out.println("== 게시물 작성 ==");
         System.out.print("제목 : ");
         String subject = sc.nextLine();
@@ -160,7 +162,7 @@ public class Main {
         System.out.printf("%d번 게시물이 등록되었습니다.\n", id );
      }
 
-    private static void actionUsrArticleDetail(Rq rq, List<Article> articles) {
+    private static void actionUsrArticleDetail(Rq rq) {
         Map<String, String> params = rq.getParams();
         if( !params.containsKey("id") ) {
             System.out.println("id값을 입력해주세요.");
@@ -196,7 +198,7 @@ public class Main {
 
     }
 
-    private static void actionUsrArticleList(Rq rq, List<Article> articles) {
+    private static void actionUsrArticleList(Rq rq) {
         Map<String, String>  params = rq.getParams();
 
         // 검색 시작
