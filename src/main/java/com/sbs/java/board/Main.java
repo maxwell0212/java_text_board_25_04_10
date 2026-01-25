@@ -84,28 +84,15 @@ public class Main {
             System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
             return;
         }
-        System.out.printf("== %d번 게시물 삭제 ==\n", id);
-        /*
-        Article findArticle = null;
-        for(Article article : articles){
-            if(article.id == id ){
-                findArticle = article;
-                break;
-            }
-        }
-        */
-        int finalId = id;
-        Article findArticle = articles.stream()
-                .filter(article-> atricle.id == finalId )
-                .findFirst()
-                .orElse(null);
 
-        if( findArticle == null ){
+        Article article = findById(id, articles);
+
+        if( article == null ){
             System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
             return;
         }
-        articles.remove(findArticle);
-        System.out.printf("%d번 게시물이 삭제 되었습니다.", id );
+        articles.remove(article);
+        System.out.printf("%d번 게시물이 삭제 되었습니다.\n", id );
     }
 
     private static void actionUsrArticleModify(Scanner sc, Rq rq, List<Article> articles) {
@@ -131,7 +118,12 @@ public class Main {
             return;
         }
         System.out.printf("== %d번 게시물 수정 ==\n", id);
-        Article article = articles.get(id-1);
+        Article article = findById(id, articles);
+
+        if( article == null ){
+            System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
+            return;
+        }
 
         System.out.print("새 제목 : ");
         article.subject = sc.nextLine();
@@ -190,9 +182,14 @@ public class Main {
             System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
             return;
         }
-        Article article = articles.get(id-1);
+        Article article = findById(id, articles);
 
-        System.out.println("== 게시물 상세보기 ==");
+        if( article == null ){
+            System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
+            return;
+        }
+
+        System.out.printf("== %d번 게시물 상세보기 ==\n", id);
         System.out.printf("번호 : %d\n", article.id);
         System.out.printf("제목 : %s\n", article.subject);
         System.out.printf("내용 : %s\n", article.content);
@@ -240,6 +237,13 @@ public class Main {
 
         sortedArticles.forEach(
                 article -> System.out.printf("%d | %s\n", article.id, article.subject));
+    }
+
+    private static Article findById(int id, List<Article> articles) {
+        return articles.stream()
+                .filter(article-> article.id == id )
+                .findFirst()
+                .orElse(null);
     }
 }
 
