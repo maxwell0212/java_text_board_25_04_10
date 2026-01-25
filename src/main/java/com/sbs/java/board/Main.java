@@ -1,5 +1,7 @@
 package com.sbs.java.board;
 
+import com.sbs.java.board.container.Container;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -9,6 +11,7 @@ import java.util.stream.IntStream;
 public class Main {
     static List<Article> articles = new ArrayList<>();
     static int lastArticleId = 0;
+    static Scanner sc = Container.sc;
 
     static void makeArticleTestData( ) {
         /*
@@ -21,8 +24,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
         makeArticleTestData();
 
         System.out.println("== 자바 게시판 ==");
@@ -37,7 +38,7 @@ public class Main {
                 break;
             }
             else if( rq.getUrlPath().equals("/usr/article/write")){
-                actionUsrArticleWrite(sc);
+                actionUsrArticleWrite();
                 lastArticleId++;
             }
             else if( rq.getUrlPath().equals("/usr/article/detail")){
@@ -47,7 +48,7 @@ public class Main {
                actionUsrArticleList(rq);
             }
             else if( rq.getUrlPath().equals("/usr/article/modify")){
-                actionUsrArticleModify(sc, rq);
+                actionUsrArticleModify(rq);
             }
             else if( rq.getUrlPath().equals("/usr/article/delete")){
                 actionUsrArticleDelete(rq);
@@ -95,7 +96,7 @@ public class Main {
         System.out.printf("%d번 게시물이 삭제 되었습니다.\n", id );
     }
 
-    private static void actionUsrArticleModify(Scanner sc, Rq rq) {
+    private static void actionUsrArticleModify(Rq rq) {
         Map<String, String> params = rq.getParams();
         if( !params.containsKey("id") ) {
             System.out.println("id값을 입력해주세요.");
@@ -134,7 +135,7 @@ public class Main {
         System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
     }
 
-    private static void actionUsrArticleWrite(Scanner sc) {
+    private static void actionUsrArticleWrite() {
         lastArticleId = articles.get(articles.size()-1).id;
 
         System.out.println("== 게시물 작성 ==");
