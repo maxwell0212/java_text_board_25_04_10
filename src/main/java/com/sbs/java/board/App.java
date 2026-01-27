@@ -39,7 +39,6 @@ public class App {
                 articleController.showDetail(rq);
             }
             else if( rq.getUrlPath().equals("/usr/article/list")){
-
                 articleController.showList(rq);
             }
             else if( rq.getUrlPath().equals("/usr/article/modify")){
