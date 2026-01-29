@@ -14,7 +14,7 @@ public class ArticleRepository {
     public ArticleRepository() {
         articles = new ArrayList<>();
         makeArticleTestData();
-        lastId = articles.get(articles.size()-1).id;
+        lastId = articles.get(articles.size()-1).getId();
     }
 
     void makeArticleTestData( ) {
@@ -40,7 +40,7 @@ public class ArticleRepository {
         List<Article> filteredArticles = new ArrayList<>(articles);
         if( !searchKeyword.isEmpty() ){
             filteredArticles = articles.stream()
-                    .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
+                    .filter(article -> article.getSubject().contains(searchKeyword) || article.getContent().contains(searchKeyword))
                     .collect(Collectors.toList());
         }
         // 정렬 로직
@@ -50,16 +50,16 @@ public class ArticleRepository {
         if( !orderBy.isEmpty() ){
             switch (orderBy){
                 case "idAsc":
-                    sortedArticles.sort((a1, a2) -> a1.id - a2.id);
+                    sortedArticles.sort((a1, a2) -> a1.getId() - a2.getId());
                     break;
                 case "idDesc":
                 default:
-                    sortedArticles.sort((a1, a2) -> a2.id - a1.id);
+                    sortedArticles.sort((a1, a2) -> a2.getId() - a1.getId());
                     break;
             }
         }
         else {
-            sortedArticles.sort( (a1, a2) -> a2.id - a1.id );
+            sortedArticles.sort( (a1, a2) -> a2.getId() - a1.getId() );
         }
 
         return sortedArticles;
@@ -67,7 +67,7 @@ public class ArticleRepository {
 
     public Article findById(int id) {
         return articles.stream()
-                .filter(article-> article.id == id )
+                .filter(article-> article.getId() == id )
                 .findFirst()
                 .orElse(null);
     }
@@ -78,8 +78,8 @@ public class ArticleRepository {
             System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
             return;
         }
-        article.subject = subject;
-        article.content = content;
+        article.setSubject(subject);
+        article.setContent(content);
     }
 
     public void delete(int id) {
