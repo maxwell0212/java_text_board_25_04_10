@@ -36,16 +36,24 @@ public class ArticleRepository {
     }
 
     public List<Article> findAll(String searchKeyword, String orderBy) {
-        // 검색 시작
-        List<Article> filteredArticles = new ArrayList<>(articles);
+        // 검색 수행
+        List<Article> filteredArticles = filterByKeyword(searchKeyword);
+        // 정렬 수행
+        return sortArticles(filteredArticles, orderBy);
+    }
+    private List<Article> filterByKeyword(String searchKeyword) {
+        List<Article> filteredArticles = findAll();
+
         if( !searchKeyword.isEmpty() ){
             filteredArticles = articles.stream()
                     .filter(article -> article.getSubject().contains(searchKeyword) || article.getContent().contains(searchKeyword))
                     .collect(Collectors.toList());
         }
-        // 정렬 로직
-        List<Article> sortedArticles = filteredArticles;
-        boolean orderByIdDesc = true;
+        return filteredArticles;
+    }
+
+    private List<Article> sortArticles(List<Article> articles, String orderBy) {
+        List<Article> sortedArticles = new ArrayList<>(articles);
 
         if( !orderBy.isEmpty() ){
             switch (orderBy){
@@ -58,10 +66,6 @@ public class ArticleRepository {
                     break;
             }
         }
-        else {
-            sortedArticles.sort( (a1, a2) -> a2.getId() - a1.getId() );
-        }
-
         return sortedArticles;
     }
 
